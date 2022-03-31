@@ -88,7 +88,7 @@ script.registerModule({
     var sw = 0;
     module.settings.F.set(0);
     });
-    module.on("world", function () {
+    module.on("world", function (e) {
     var sw = 0;
     });
     module.on("update", function () {
@@ -114,6 +114,8 @@ script.registerModule({
     var BackColor = new Color(23,23,25,203).getRGB();
     var Font = Fonts.font40;
     
+    if (getRTarget() != null) {
+    
 	GL11.glPushMatrix();
 	
 	Gui.drawRect(mcWidth/2+15, mcHeight/2+44, mcWidth/2+135, mcHeight/2+73, BackColor);	
@@ -126,11 +128,13 @@ script.registerModule({
 	GL11.glPopMatrix();
 	
 	drawFace(getRTarget(), mcWidth/2+16.3, mcHeight/2+45.8);
+    }
     });
     
     module.on("render3D", function () { //greift auf die 3d Bildschrimfläche zu und erlaubt eingefügte objekte auf 3d ebene, also auch im spiel
     	
-    if (module.settings.z.get()) {	
+    if (module.settings.z.get() && getRTarget() != null) {
+    	
     GL11.glPushMatrix();
     
     GL11.glTranslated(

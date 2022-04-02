@@ -2,7 +2,7 @@
 var script = registerScript({
     name: "IT-Script",
     version: "1.0",
-    authors: ["Ich"]
+    authors: ["Hannes"]
 });
 
 //java imports für minecraft bezogenen code
@@ -28,10 +28,6 @@ var Timer = new MSTimer();
 //einfache mathematik rechnet winkel * pi / 180
 Math.rad = function(deg) {
     return deg * Math.PI / 180;
-}
-
-function fadeCircle(min,max) {
-	return Math.floor(Math.random()*(max-min+1)+min)
 }
 
 //funktion um den nächstgelegenen Spieler zu bekommen
@@ -111,7 +107,7 @@ script.registerModule({
     module.on("world", function () {
     var sx = 0;
     var sw = 0;
-    module.settings.XX.get();
+    module.settings.XX.set(0);
     module.settings.F.set(0);
     });
     module.on("update", function () {
@@ -213,26 +209,10 @@ script.registerModule({
     });
 });
 
-//einfache Prozentrechnung
-function toPercent(num, total) { 
-    return (Math.round(num / total * 10000) / 100);
-}
-
 //funktion um den spielerkopf des nächstgelegenen spielers zu "zeichnen"
 function drawFace (target, x, y) {
 	mc.getTextureManager().bindTexture(target.getLocationSkin());
 	GL11.glEnable(GL11.GL_BLEND); GL11.glColor4f(1, 1, 1, 1);
 	Gui.drawScaledCustomSizeModalRect(x, y, 8, 8, 8, 8, 27, 27, 64, 64);
 	GL11.glDisable(GL11.GL_BLEND);
-}
-
-//korrektur (wenn falsch) der prozentrechnung
-function argCheck(num,min,max){
-    if(num>max){
-        return max;
-    }
-    if(num<min){
-        return min;
-    }
-    return num;
 }

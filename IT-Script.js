@@ -2,7 +2,7 @@
 var script = registerScript({
     name: "IT-Script",
     version: "1.0",
-    authors: ["Hannes"]
+    authors: ["ICH"]
 });
 
 //java imports für minecraft bezogenen code

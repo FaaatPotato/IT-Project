@@ -30,6 +30,10 @@ Math.rad = function(deg) {
     return deg * Math.PI / 180;
 }
 
+function fadeCircle(min,max) {
+	return Math.floor(Math.random()*(max-min+1)+min)
+}
+
 //funktion um den nächstgelegenen Spieler zu bekommen
 function getRTarget() {
 	var filteredEntites = []
@@ -56,42 +60,62 @@ script.registerModule({
     tag: "LiquidScript",
     settings: {
         z: Setting.boolean({
-            name: "Markierung",
+            name: "Visuelle-Markierung",
+            default: false
+		}),
+        x: Setting.boolean({
+            name: "Übergang",
             default: false
 		}),
 		L: Setting.float({
-			name: "StrichStärke",
+			name: "Strich-Stärke",
 			default: 1,
-			min:0,
+			min:1,
 			max:100
 		}),
 		S: Setting.float({
-			name: "FadeSpeed",
+			name: "Animations-Geschwindigkeit",
 			default: 0.1,
 			min:0.01,
 			max:0.5
 		}),
 		F: Setting.float({
-			name: "DebugFade",
+			name: "Animations-Vorgang",
 			default: 0.0,
 			min:0.0,
 			max:2.0
 		}),
+        XX: Setting.integer({
+            name: "Farb-Vorgang",
+            default: 0,
+            min:0,
+            max:255
+        }),
     }
 
 }, function (module) {
     module.on("enable", function () {
     var sw = 0;
     module.settings.F.set(0);
+    
+    var sx = 0;
+    module.settings.XX.set(0)
     });
     module.on("disable", function () {
     var sw = 0;
     module.settings.F.set(0);
+    
+    var sx = 0;
+    module.settings.XX.set(0)
     });
-    module.on("world", function (e) {
+    module.on("world", function () {
+    var sx = 0;
     var sw = 0;
+    module.settings.XX.get();
+    module.settings.F.set(0);
     });
     module.on("update", function () {
+    	
     if (module.settings.F.get() >= 2) {
     sw = 1	
     }
@@ -104,6 +128,21 @@ script.registerModule({
     }
     if (sw == 0) {
     module.settings.F.set(module.settings.F.get()+module.settings.S.get())	
+    }
+    
+    
+    if (module.settings.XX.get() >= 255) {
+    sx = 1	
+    }
+    if (module.settings.XX.get() <= 0) {
+    sx = 0;	
+    }
+        
+    if (sx == 1) {
+    module.settings.XX.set(module.settings.XX.get()-1)	
+    }
+    if (sx == 0) {
+    module.settings.XX.set(module.settings.XX.get()+1)	
     }
     });
     module.on("render2D", function (e) { //greift auf die 2d Bildschrimfläche zu und erlaubt eingefügte objekte auf 2d ebene
@@ -150,7 +189,11 @@ script.registerModule({
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     
     GL11.glLineWidth(module.settings.L.get());
+    if (module.settings.x.get()) {
+    RenderUtils.glColor(new Color(0, module.settings.XX.get(), 0, 255));	
+    } else {
     RenderUtils.glColor(new Color(0, 255, 0, 255));
+    }
     GL11.glRotatef(90, 1, 0, 0);
     GL11.glBegin(GL11.GL_LINE_STRIP);
     
